@@ -21,6 +21,9 @@ import java.awt.Container;
 import java.awt.Dimension;
 import java.awt.Window;
 
+import javax.accessibility.Accessible;
+import javax.accessibility.AccessibleContext;
+import javax.accessibility.AccessibleRole;
 import javax.swing.JComponent;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
@@ -60,6 +63,30 @@ abstract public class Display extends JPanel {
         return (top instanceof Window w) && w.isActive();
     }
 
+    /**
+     * An inner class that provides the accessible context.
+    */
+    protected class AccessibleDisplayPanel extends AccessibleJPanel {
+        @Override
+        public AccessibleRole getAccessibleRole() {
+            // Return the appropriate role for your component.
+            return AccessibleRole.PANEL;
+        }
+    }
+    
+    /**
+     * Returns the accessible context for the panel.
+    */
+    protected AccessibleContext accessibleContext;
+    
+    @Override
+    public AccessibleContext getAccessibleContext() {
+        if (this.accessibleContext == null) {
+            this.accessibleContext = new AccessibleDisplayPanel();
+        }
+        return this.accessibleContext;
+    }
+    
     /**
      * Callback method to build the content of the display panel.
      */
